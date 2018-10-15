@@ -9,8 +9,8 @@
     </groups>
     <templates>
         <template>
-            <template>HP-SmartArray-Template</template>
-            <name>HP-SmartArray-Template</name>
+            <template>HP-SmartArray-Template1</template>
+            <name>HP-SmartArray-Template1</name>
             <groups>
                 <group>
                     <name>Templates</name>

@@ -82,16 +82,16 @@ for c in $(/usr/local/bin/hp-raid-ctrl-discovery.sh raw);
 
 for l in $(/usr/local/bin/hp-raid-ld-discovery.sh raw);
   do
-    echo -n -e "hpraid.ld.status[$l]\n";
+    echo -n -e "hpraid.ld.status[\"$l\"]\n";
   done >> $all_keys
 
 for p in $(/usr/local/bin/hp-raid-pd-discovery.sh raw);
   do
     if grep -Fq 'Current Temperature' $data_out
     then
-      echo -n -e "hpraid.pd.status[$p]\nhpraid.pd.temperature[$p]\n";
+      echo -n -e "hpraid.pd.status[\"$p\"]\nhpraid.pd.temperature[\"$p\"]\n";
     else
-      echo -n -e "hpraid.pd.status[$p]\n";
+      echo -n -e "hpraid.pd.status[\"$p\"]\n";
     fi
   done >> $all_keys
 
@@ -105,7 +105,8 @@ cat $all_keys | while read key; do
   if [[ "$key" == *hpraid.cache.status* ]]; then
      slot=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d, -f1)
      value=$(sed -n -e "/ctrl begin $slot/,/ctrl end $slot/p" /tmp/hp-raid-data-harvester.out |grep -wE "[ ]+Cache Status:" |awk '{print $3}')
-     echo "$zbx_hostname $key $value" >> $zbx_data
+  #   echo "$zbx_hostname $key $value" >> $zbx_data
+  
   fi
 
   if [[ "$key" == *hpraid.bbu.status* ]]; then
@@ -115,22 +116,22 @@ cat $all_keys | while read key; do
   fi
 
   if [[ "$key" == *hpraid.ld.status* ]]; then
-     slot=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d: -f1)
-     ld=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d: -f2)
+     slot=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d, -f1 | tr -d "\"")
+     ld=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d, -f2- | tr -d "\"" )
      value=$(sed -n -e "/ld begin $slot $ld/,/ld end $slot $ld/p" /tmp/hp-raid-data-harvester.out |grep -wE "[ ]+Status:" |awk '{print $2}')
      echo "$zbx_hostname $key $value" >> $zbx_data
   fi
 
   if [[ "$key" == *hpraid.pd.temperature* ]]; then
-     slot=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d: -f1)
-     pd=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d: -f2-)
+     slot=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d, -f1| tr -d "\"")
+     pd=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d, -f2-| tr -d "\"" )
      value=$(sed -n -e "/pd begin $slot $pd/,/pd end $slot $pd/p" /tmp/hp-raid-data-harvester.out |grep -wE '[ ]+Current Temperature \(C\):' |awk '{print $4}')
      echo "$zbx_hostname $key $value" >> $zbx_data
   fi
 
   if [[ "$key" == *hpraid.pd.status* ]]; then
-     slot=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d: -f1)
-     pd=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d: -f2-)
+     slot=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d, -f1| tr -d "\"")
+     pd=$(echo $key |grep -o '\[.*\]' |tr -d \[\] |cut -d, -f2-| tr -d "\"" )
      value=$(sed -n -e "/pd begin $slot $pd/,/pd end $slot $pd/p" /tmp/hp-raid-data-harvester.out |grep -wE '[ ]+Status:' |awk '{print $2}')
      echo "$zbx_hostname $key $value" >> $zbx_data
   fi

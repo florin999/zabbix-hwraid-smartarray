@@ -5,7 +5,7 @@
 data="/tmp/hp-raid-data-harvester.out"
 
 if [ -f $data ]; then
-  pd_list=$(sed -n -e '/pd section begin/,/pd section end/p' $data |grep -w 'pd begin' |awk '{OFS=":"} {print $4,$5}')
+  pd_list=$(sed -n -e '/pd section begin/,/pd section end/p' $data |grep -w 'pd begin' |awk '{OFS=","} {print $4,$5}')
   else echo "$data not found."; exit 1
 fi
 
