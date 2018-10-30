@@ -8,6 +8,7 @@
 
 ## Installation notes:
 1. You can run install.sh or 
+
    A. Add the [`zabbix.smartarray`](zabbix.smartarray) cron job into `/etc/cron.d`
    B. Install the [`hp-raid-smart-array.conf`](hp-raid-smart-array.conf) Zabbix user
       parameters into your Zabbix agent's
