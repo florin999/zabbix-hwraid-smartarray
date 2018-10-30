@@ -7,15 +7,16 @@
 - auto-discovery and agentd-side send data procedure
 
 ## Installation notes:
-1. Install the [`zabbix.smartarray`](zabbix.smartarray) cron job into `/etc/cron.d`
-2. Install the [`hp-raid-smart-array.conf`](hp-raid-smart-array.conf) Zabbix user
-   parameters into your Zabbix agent's
-   [`Include`](https://www.zabbix.com/documentation/3.0/manual/appendix/config/zabbix_agentd)
-   directory (usually `/etc/zabbix/zabbix_agentd.d`).
-3. Copy the content of the scripts directory to `/usr/local/bin/`
-4. Make sure the scripts are executable `chmod 755 /usr/local/bin/hp-raid-*`
-4. Import the [`hp-smart-array-template.xml`](hp-smart-array-template.xml) into
-   your Zabbix server.
+1. You can run install.sh or 
+   A. Add the [`zabbix.smartarray`](zabbix.smartarray) cron job into `/etc/cron.d`
+   B. Install the [`hp-raid-smart-array.conf`](hp-raid-smart-array.conf) Zabbix user
+      parameters into your Zabbix agent's
+      [`Include`](https://www.zabbix.com/documentation/3.0/manual/appendix/config/zabbix_agentd)
+      directory (usually `/etc/zabbix/zabbix_agentd.d`).
+   C. Copy the content of the scripts directory to `/usr/local/bin/`
+   D. Make sure the scripts are executable `chmod 755 /usr/local/bin/hp-raid-*`
+   E. Import the [`hp-smart-array-template.xml`](hp-smart-array-template.xml) into
+      your Zabbix server.
 5. Add the template to your host (or stack template)
 6. Check if new data arrives
 
